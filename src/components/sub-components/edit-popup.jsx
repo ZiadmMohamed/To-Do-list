@@ -3,7 +3,7 @@ import { useTasks } from "../../common/TasksContext";
 import { useState } from "react";
 
 function EditCard() {
-  const { handleDisplay, editTask } = useTasks();
+  const { displayEditTask, editTask } = useTasks();
   const [editedtask, setEditedtask] = useState();
   const { taskToEdit } = useTasks();
 
@@ -63,7 +63,7 @@ function EditCard() {
             color="secondary"
             variant="outlined"
             className="cancel-btn"
-            onClick={handleDisplay}
+            onClick={displayEditTask}
           >
             الغاء
           </Button>

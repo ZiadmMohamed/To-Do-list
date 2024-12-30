@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 // Create a context for tasks
 const TasksContext = createContext();
@@ -7,21 +7,37 @@ const TasksContext = createContext();
 export const useTasks = () => useContext(TasksContext);
 
 export const TasksProvider = ({ children }) => {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => {
+    return JSON.parse(localStorage.getItem("tasks")) || [];
+  });
 
-  const [display, setdisplay] = useState(false);
-  const [taskToEdit, setTaskToEdit] = useState();
+  const [editDisplayed, setEditDisplayed] = useState(false);
+  const [deleteDisplayed, setDeleteDisplayed] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState(null);
 
-  function handleDisplay() {
-    setdisplay(!display);
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  function displayEditTask() {
+    setEditDisplayed((pre) => !pre);
+  }
+
+  function displayDeleteTask() {
+    setDeleteDisplayed((pre) => !pre);
   }
 
   const addTask = (title) => {
-    setTasks([...tasks, { id: tasks.length + 1, title }]);
+    setTasks([...tasks, { id: tasks.length + 1, title, done: false }]);
   };
 
-  const deleteTask = (id) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  const deleteTask = () => {
+    setTasks((prevTasks) =>
+      prevTasks.filter((task) => task.id !== taskToEdit)
+    );
+
+    setTaskToEdit(null);
+    displayDeleteTask();
   };
 
   const editTask = (id, title, desc) => {
@@ -32,20 +48,31 @@ export const TasksProvider = ({ children }) => {
     );
 
     setTaskToEdit(null);
-    handleDisplay();
+    displayEditTask();
+  };
+
+  const toggleDone = (id) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, done: !task.done } : task
+      )
+    );
   };
 
   return (
     <TasksContext.Provider
       value={{
         tasks,
-        display,
+        editDisplayed,
+        deleteDisplayed,
         taskToEdit,
         addTask,
         deleteTask,
-        handleDisplay,
+        displayEditTask,
+        displayDeleteTask,
         editTask,
         setTaskToEdit,
+        toggleDone,
       }}
     >
       {children}

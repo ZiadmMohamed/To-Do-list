@@ -7,14 +7,23 @@ import Done from "@mui/icons-material/Done";
 import { useTasks } from "../../common/TasksContext";
 
 export default function FloatingActionButtons({ id }) {
-  const { deleteTask, handleDisplay, setTaskToEdit } = useTasks();
+  const {
+    displayEditTask,
+    setTaskToEdit,
+    toggleDone,
+    tasks,
+    displayDeleteTask,
+  } = useTasks();
+  const task = tasks.find((task) => task.id === id)?.done;
 
-  const handleDelete = () => {
-    deleteTask(id);
-  };
-  const handleEdit = () => {
+  const displayEdit = () => {
     setTaskToEdit(id);
-    handleDisplay();
+    displayEditTask();
+  };
+
+  const displayDelete = () => {
+    setTaskToEdit(id);
+    displayDeleteTask();
   };
 
   return (
@@ -24,7 +33,7 @@ export default function FloatingActionButtons({ id }) {
         color="white"
         aria-label="delete"
         style={{ border: "3px solid #9a0036" }}
-        onClick={handleDelete}
+        onClick={displayDelete}
       >
         <DeleteOutlineOutlinedIcon
           style={{ width: "20px", color: "#9a0036" }}
@@ -36,7 +45,7 @@ export default function FloatingActionButtons({ id }) {
         color="white"
         aria-label="edit"
         style={{ border: "3px solid #115293" }}
-        onClick={handleEdit}
+        onClick={displayEdit}
       >
         <EditIcon style={{ width: "20px", color: "#115293" }} />
       </Fab>
@@ -44,9 +53,13 @@ export default function FloatingActionButtons({ id }) {
       <Fab
         size="small"
         aria-label="like"
-        style={{ border: "3px solid #82bc3e" }}
+        style={{ border: "3px solid #82bc3e", color: "#82bc3e" }}
+        className={task ? "done" : ""}
+        onClick={() => {
+          toggleDone(id);
+        }}
       >
-        <Done style={{ width: "20px", color: "#82bc3e" }} />
+        <Done style={{ width: "20px" }} />
       </Fab>
     </Box>
   );
