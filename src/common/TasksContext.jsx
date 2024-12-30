@@ -14,6 +14,23 @@ export const TasksProvider = ({ children }) => {
   const [editDisplayed, setEditDisplayed] = useState(false);
   const [deleteDisplayed, setDeleteDisplayed] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
+  const [popupDisplayed, setPopupDisplayed] = useState(false);
+    const [alignment, setAlignment] = useState('all');
+  
+    const handleChange = (newAlignment) => {
+      console.log(newAlignment);
+      
+      setAlignment(newAlignment);
+    };
+
+    const showPopup = () => {
+    setPopupDisplayed(true);
+    setTimeout(() => {
+      setPopupDisplayed(false);
+    }, 2000);
+  };
+
+
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -32,9 +49,7 @@ export const TasksProvider = ({ children }) => {
   };
 
   const deleteTask = () => {
-    setTasks((prevTasks) =>
-      prevTasks.filter((task) => task.id !== taskToEdit)
-    );
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskToEdit));
 
     setTaskToEdit(null);
     displayDeleteTask();
@@ -66,6 +81,8 @@ export const TasksProvider = ({ children }) => {
         editDisplayed,
         deleteDisplayed,
         taskToEdit,
+        popupDisplayed,
+        alignment,
         addTask,
         deleteTask,
         displayEditTask,
@@ -73,6 +90,8 @@ export const TasksProvider = ({ children }) => {
         editTask,
         setTaskToEdit,
         toggleDone,
+        showPopup,
+        handleChange
       }}
     >
       {children}

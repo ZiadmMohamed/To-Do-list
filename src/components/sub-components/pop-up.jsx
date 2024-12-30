@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 
-function Popup({ message = "تم التعديل بنجاح" }) {
+function Popup({ message = "تم اضافة مهمه " }) {
   const popupStyle = {
     fontSize: "10px",
     display: "flex",

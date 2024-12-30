@@ -6,34 +6,59 @@ import { useTasks } from "../common/TasksContext";
 
 function Card() {
   const [newTaskTitle, setNewTaskTitle] = useState("");
-  const { tasks, addTask } = useTasks();
+  const { tasks, addTask, showPopup, alignment } = useTasks();
 
-  const displayTasks =
-    tasks.length === 0 ? (
-      <h1 style={{ margin: "100px" }}>لا يوجد مهام</h1>
-    ) : (
-      tasks.map((task) => (
-        <Task key={task.id} id={task.id} title={task.title} desc={task.desc} />
-      ))
-    );
+  const renderTasks = () => {
+    if (tasks.length === 0) {
+      return <h1 style={{ margin: "100px" }}>لا يوجد مهام</h1>;
+    }
+
+    if (alignment === "done") {
+      return tasks
+        .filter((task) => task.done)
+        .map((task) => (
+          <Task
+            key={task.id}
+            id={task.id}
+            title={task.title}
+            desc={task.desc}
+          />
+        ));
+    } else if (alignment === "not done") {
+      return tasks
+        .filter((task) => !task.done)
+        .map((task) => (
+          <Task
+            key={task.id}
+            id={task.id}
+            title={task.title}
+            desc={task.desc}
+          />
+        ));
+    }
+
+    return tasks.map((task) => (
+      <Task key={task.id} id={task.id} title={task.title} desc={task.desc} />
+    ));
+  };
 
   const handleAddTask = () => {
     addTask(newTaskTitle);
     setNewTaskTitle("");
+    showPopup();
   };
 
   return (
     <div className="card">
-
       {/* Header */}
       <h1 style={{ fontSize: "45px" }}>مها مي</h1>
       <hr />
       <ColorToggleButton />
-      
-{/* Tasks */}
-      {displayTasks}
 
-{/* Add Task */}
+      {/* Tasks */}
+      {renderTasks()}
+
+      {/* Add Task */}
       <div
         style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}
       >
@@ -56,7 +81,6 @@ function Card() {
           value={newTaskTitle}
         />
       </div>
-    
     </div>
   );
 }
