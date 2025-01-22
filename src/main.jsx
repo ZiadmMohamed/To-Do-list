@@ -22,6 +22,9 @@ const theme = createTheme({
       contrastText: "#ffffff", // Optional contrast text
     },
   },
+  // typography: {
+  //   fontFamily: "a",
+  // },
 });
 
 createRoot(document.getElementById("root")).render(

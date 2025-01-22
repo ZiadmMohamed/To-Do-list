@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button, Grid2, TextField } from "@mui/material";
 import ColorToggleButton from "./sub-components/categories";
 import Task from "./task";
 import { useState } from "react";
@@ -49,7 +49,7 @@ function Card() {
   };
 
   return (
-    <div className="card">
+    <div className="card" style={{ maxHeight: "80vh", overflowY: "auto" }}>
       {/* Header */}
       <h1 style={{ fontSize: "45px" }}>مها مي</h1>
       <hr />
@@ -59,28 +59,30 @@ function Card() {
       {renderTasks()}
 
       {/* Add Task */}
-      <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}
-      >
-        <Button
-          style={{ width: "34%", height: "40px", marginRight: "10px" }}
-          color="secondary"
-          variant="contained"
-          onClick={handleAddTask}
-          disabled={!newTaskTitle.trim()}
-        >
-          اضافه
-        </Button>
+      <Grid2 container>
+        <Grid2 size={4}>
+          <Button
+            style={{ width: "100%", height: "40px", marginRight: "10px" }}
+            color="secondary"
+            variant="contained"
+            onClick={handleAddTask}
+            disabled={!newTaskTitle.trim()}
+          >
+            اضافه
+          </Button>{" "}
+        </Grid2>
 
-        <TextField
-          size="small"
-          id="outlined-basic"
-          label="عنوان المهمه"
-          variant="outlined"
-          onChange={(e) => setNewTaskTitle(e.target.value)}
-          value={newTaskTitle}
-        />
-      </div>
+        <Grid2 size={8}>
+          <TextField
+            size="small"
+            id="outlined-basic"
+            label="عنوان المهمه"
+            variant="outlined"
+            onChange={(e) => setNewTaskTitle(e.target.value)}
+            value={newTaskTitle}
+          />{" "}
+        </Grid2>
+      </Grid2>
     </div>
   );
 }

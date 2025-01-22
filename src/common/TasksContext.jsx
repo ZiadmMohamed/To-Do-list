@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { createContext, useContext, useEffect, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 // Create a context for tasks
 const TasksContext = createContext();
@@ -10,32 +11,28 @@ export const TasksProvider = ({ children }) => {
   const [tasks, setTasks] = useState(() => {
     return JSON.parse(localStorage.getItem("tasks")) || [];
   });
-
+ 
   const [editDisplayed, setEditDisplayed] = useState(false);
   const [deleteDisplayed, setDeleteDisplayed] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
   const [popupDisplayed, setPopupDisplayed] = useState(false);
-    const [alignment, setAlignment] = useState('all');
-  
-    const handleChange = (newAlignment) => {
-      console.log(newAlignment);
-      
-      setAlignment(newAlignment);
-    };
+  const [alignment, setAlignment] = useState("all");
 
-    const showPopup = () => {
+  const handleChange = (newAlignment) => {
+    setAlignment(newAlignment);
+  };
+
+  const showPopup = () => {
     setPopupDisplayed(true);
     setTimeout(() => {
       setPopupDisplayed(false);
     }, 2000);
   };
 
-
-
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
-
+// Display Functions
   function displayEditTask() {
     setEditDisplayed((pre) => !pre);
   }
@@ -43,9 +40,11 @@ export const TasksProvider = ({ children }) => {
   function displayDeleteTask() {
     setDeleteDisplayed((pre) => !pre);
   }
+// Display Functions
 
+// Main Functions
   const addTask = (title) => {
-    setTasks([...tasks, { id: tasks.length + 1, title, done: false }]);
+    setTasks([...tasks, { id: uuidv4(), title, done: false }]);
   };
 
   const deleteTask = () => {
@@ -73,6 +72,7 @@ export const TasksProvider = ({ children }) => {
       )
     );
   };
+// Main Functions
 
   return (
     <TasksContext.Provider
@@ -91,7 +91,7 @@ export const TasksProvider = ({ children }) => {
         setTaskToEdit,
         toggleDone,
         showPopup,
-        handleChange
+        handleChange,
       }}
     >
       {children}

@@ -2,7 +2,7 @@ import "./App.css";
 import Card from "./components/card";
 import EditCard from "./components/sub-components/edit-popup";
 import { useTasks } from "./common/TasksContext";
-import DeletePopup from "./components/sub-components/delete-popup copy";
+import DeletePopup from "./components/sub-components/delete-popup";
 import Popup from "./components/sub-components/pop-up";
 
 function App() {
