@@ -1,43 +1,35 @@
 import { Button, Grid2, TextField } from "@mui/material";
 import ColorToggleButton from "./sub-components/categories";
 import Task from "./task";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTasks } from "../common/TasksContext";
 
 function Card() {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const { tasks, addTask, showPopup, alignment } = useTasks();
 
+  const completedTodos = useMemo(
+    () => tasks.filter((task) => task.done),
+    [tasks]
+  );
+
+  const nonCompletedTodos = useMemo(
+    () => tasks.filter((task) => !task.done),
+    [tasks]
+  );
+
+  const todosToBeRenderd =
+    alignment === "done"
+      ? completedTodos
+      : alignment === "not done"
+      ? nonCompletedTodos
+      : tasks;
+
   const renderTasks = () => {
     if (tasks.length === 0) {
       return <h1 style={{ margin: "100px" }}>لا يوجد مهام</h1>;
     }
-
-    if (alignment === "done") {
-      return tasks
-        .filter((task) => task.done)
-        .map((task) => (
-          <Task
-            key={task.id}
-            id={task.id}
-            title={task.title}
-            desc={task.desc}
-          />
-        ));
-    } else if (alignment === "not done") {
-      return tasks
-        .filter((task) => !task.done)
-        .map((task) => (
-          <Task
-            key={task.id}
-            id={task.id}
-            title={task.title}
-            desc={task.desc}
-          />
-        ));
-    }
-
-    return tasks.map((task) => (
+    return todosToBeRenderd.map((task) => (
       <Task key={task.id} id={task.id} title={task.title} desc={task.desc} />
     ));
   };
@@ -86,5 +78,6 @@ function Card() {
     </div>
   );
 }
+
 
 export default Card;
